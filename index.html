@@ -1,0 +1,248 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script type="text/javascript">
+            
+            
+            
+            arrayPseupos = new Array();
+            arrayCuadrados = new Array();
+            var m;
+            
+            function congruencial()
+            {
+                var a = parseInt(document.getElementById("a").value);
+                var c = parseInt(document.getElementById("c").value);
+                m = parseInt(document.getElementById("m").value);
+                var Xi = parseInt(document.getElementById("semilla").value);
+                
+                while(true)
+                {
+                    var dato = a*Xi +c;
+                    Xi =  dato%m;
+                    if(existe(Xi, arrayPseupos))
+                        break;
+                    else
+                        arrayPseupos.push(Xi);
+                }
+                
+                imprimirCongruencial();
+            }
+            
+            function existe(numero, vector)
+            {
+                var i =0;
+                if(vector.length < 1){}
+                else
+                {
+                    while(i<vector.length)
+                    {
+                         if(vector[i] === numero)
+                         {
+                             return true;
+                         }               
+
+                         i++;
+                    }
+                }
+                
+                return false;
+            }
+            
+            function imprimirCongruencial()
+            {
+                var i;
+                var impreso = "";
+                var deCeroaUno ="";
+                
+                for(i=0; i<arrayPseupos.length; i++)
+                {
+                    impreso = ""+arrayPseupos[i];
+                    var numero_ceroUno = Math.round((arrayPseupos[i]/(m-1))*10000)/10000;
+                    deCeroaUno = ""+numero_ceroUno;
+                    addRow2("tablita", impreso, deCeroaUno);
+                }
+                
+            }
+            
+            function cuadradosMedios()
+            {
+               var numeroIngresado = parseInt(document.getElementById("cuadrado").value);
+               while(true)
+               {
+                    var Xi = Math.pow(numeroIngresado,2);
+                    var transicion = Xi.toString();
+                    var vector =transicion.split("");                              
+                    
+                    if(!esPar(vector.length))
+                        vector.unshift("0");
+                    
+                    while(vector.length > 4)
+                    {
+                        vector.shift();
+                        vector = rotar(vector);
+                    }
+
+                    var datoString = vector.join("");
+                    var numeroEntero = parseInt(datoString);
+
+                    if(!existe(numeroEntero, arrayCuadrados))
+                    {
+                        arrayCuadrados.push(numeroEntero);
+                        numeroIngresado = numeroEntero;
+                    }
+                    else
+                        break;
+               }
+               
+               imprimirCuadrados();
+            }
+            
+            function esPar(numero)
+            {
+                if(numero%2 === 0)
+                    return true;
+                else
+                    return false;
+            }
+                                   
+            function rotar(dato1)
+            {
+                var dato2 = new Array();
+                var x;
+                
+                for(x= 0; x<dato1.length; x++)
+                    dato2[x] = dato1[(dato1.length-1) - x];
+ 
+                return dato2;
+            }
+            
+            function imprimirCuadrados()
+            {
+                var i;
+                var impreso = "";
+                var deCeroaUno ="";
+                
+                for(i=0;i<arrayCuadrados.length;i++)
+                {                  
+                    //alert(arrayCuadrados[i]);
+                    impreso = ""+arrayCuadrados[i];
+                    var numero_ceroUno = arrayCuadrados[i]/10000;
+                    deCeroaUno = ""+numero_ceroUno;
+                    addRow2("tablita2", impreso, deCeroaUno);
+                }
+
+            }
+            
+            
+             function addRow(tableID) {
+
+               var table = document.getElementById(tableID);
+
+ 
+
+               var rowCount = table.rows.length;
+
+               var row = table.insertRow(rowCount);
+
+ 
+
+               var cell1 = row.insertCell(0);
+
+               var element1 = document.createElement("input");
+
+               element1.type = "checkbox";               
+
+               cell1.appendChild(element1);
+
+ 
+
+               var cell2 = row.insertCell(1);
+
+               var element2 = document.createElement("input");
+
+               element2.type = "text";
+
+               cell2.appendChild(element2);
+               
+               
+               var cell3 = row.insertCell(2);
+
+               var element3 = document.createElement("span");
+
+               element3.innerHTML = "hola";               
+
+               cell3.appendChild(element3);
+
+
+          }
+          
+          function addRow2(tableID, numero1, numero2) {
+
+               var table = document.getElementById(tableID);
+
+               var rowCount = table.rows.length;
+
+               var row = table.insertRow(rowCount);
+
+               var cell3 = row.insertCell(0);
+
+                var element3 = document.createElement("span");
+
+                element3.innerHTML = ""+numero1;               
+
+                cell3.appendChild(element3);
+
+
+                var cell4 = row.insertCell(1);
+
+                var element4 = document.createElement("span");
+
+                element4.innerHTML = ""+numero2;               
+
+                cell4.appendChild(element4);
+
+          }
+        </script>
+    </head>
+    <body>
+        <div>
+            Semilla:<br/>
+            <input type="text" id="semilla"/><br/>
+            A:<br/>
+            <input type="text" id="a"/><br/>
+            C:<br/>
+            <input type="text" id="c"/><br/>
+            M:<br/>
+            <input type="text" id="m"/><br/>
+            <button onclick="congruencial()">Generar</button><br/>
+            Datos del Generador: <span id="congruencial"></span><br/><br/>
+            Numeros entre 0 y 1: <span id="congruencial01"></span><br/>
+        </div>
+        <div>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            
+            Semilla:<br/>
+            <input type="text" id="cuadrado"/><br/>
+            <button onclick="cuadradosMedios()">Generar</button><br/>
+            Datos del Generador: <span id="cuadrados"></span><br/><br/>
+            Numeros entre 0 y 1: <span id="cuadrados01"></span><br/>
+
+        </div>
+        <div>
+            <table id="tablita"></table>            
+        </div>
+        <div>
+            <table id="tablita2"></table>            
+        </div>
+    </body>
+</html>

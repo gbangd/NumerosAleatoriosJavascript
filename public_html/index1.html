@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]> <html class="lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]> <html class="lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Login Form</title>
+  <link rel="stylesheet" href="css/style.css">
+  <!--[if lt IE 9]><script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+  <script type="text/javascript">
+            
+            
+            arrayPseupos = new Array();
+            arrayCuadrados = new Array();
+            var m;
+            
+            function congruencial()
+            {
+                //declaracion de variables y asignacion de valores
+                var a = parseInt(document.getElementById("a").value);
+                var c = parseInt(document.getElementById("c").value);
+                m = parseInt(document.getElementById("m").value);
+                var Xi = parseInt(document.getElementById("semilla").value);
+                
+                while(true)
+                {
+                    var dato = a*Xi +c;
+                    Xi =  dato%m;
+                    if(existe(Xi, arrayPseupos))
+                        break;
+                    else
+                        arrayPseupos.push(Xi);
+                }
+                
+                imprimirCongruencial();
+            }
+            
+            function existe(numero, vector)
+            {
+                var i =0;
+                if(vector.length < 1){}
+                else
+                {
+                    while(i<vector.length)
+                    {
+                         if(vector[i] === numero)
+                         {
+                             return true;
+                         }               
+
+                         i++;
+                    }
+                }
+                
+                return false;
+            }
+            
+            function imprimirCongruencial()
+            {
+                var i;
+                var impreso = "";
+                var deCeroaUno ="";
+                
+                for(i=0; i<arrayPseupos.length; i++)
+                {
+                    impreso = ""+arrayPseupos[i];
+                    var numero_ceroUno = Math.round((arrayPseupos[i]/(m-1))*10000)/10000;
+                    deCeroaUno = ""+numero_ceroUno;
+                    addRow2("tablita", impreso, deCeroaUno);
+                }
+                
+            }
+            
+            function cuadradosMedios()
+            {
+               var numeroIngresado = parseInt(document.getElementById("cuadrado").value);
+               while(true)
+               {
+                    var Xi = Math.pow(numeroIngresado,2); // eleva al cuadrado
+                    var transicion = Xi.toString();
+                    var vector =transicion.split("");                              
+                    
+                    if(!esPar(vector.length))
+                        vector.unshift("0");
+                    
+                    while(vector.length > 4)
+                    {
+                        //se elimina el primer valor del vector y se rota
+                        vector.shift();
+                        vector = rotar(vector);
+                    }
+
+                    var datoString = vector.join(""); // vector a string 
+                    var numeroEntero = parseInt(datoString); // string a entero
+
+                    if(!existe(numeroEntero, arrayCuadrados)) // si el valor no existe
+                    {
+                        arrayCuadrados.push(numeroEntero);
+                        numeroIngresado = numeroEntero;
+                    }
+                    else // si existe me salgo
+                        break;
+               }
+               
+               imprimirCuadrados();
+            }
+            
+            function esPar(numero)
+            {
+                if(numero%2 === 0)
+                    return true;
+                else
+                    return false;
+            }
+                                   
+            function rotar(dato1)
+            {
+                var dato2 = new Array();
+                var x;
+                
+                for(x= 0; x<dato1.length; x++)
+                    dato2[x] = dato1[(dato1.length-1) - x];
+ 
+                return dato2;
+            }
+            
+            function imprimirCuadrados()
+            {
+                var i;
+                var impreso = "";
+                var deCeroaUno ="";
+                
+                for(i=0;i<arrayCuadrados.length;i++)
+                {                  
+                    //alert(arrayCuadrados[i]);
+                    impreso = ""+arrayCuadrados[i];
+                    var numero_ceroUno = arrayCuadrados[i]/10000;
+                    deCeroaUno = ""+numero_ceroUno;
+                    addRow2("tablita2", impreso, deCeroaUno);
+                }
+
+            }
+            
+            
+             function addRow(tableID) {
+
+               var table = document.getElementById(tableID);
+
+ 
+
+               var rowCount = table.rows.length;
+
+               var row = table.insertRow(rowCount);
+
+ 
+
+               var cell1 = row.insertCell(0);
+
+               var element1 = document.createElement("input");
+
+               element1.type = "checkbox";               
+
+               cell1.appendChild(element1);
+
+ 
+
+               var cell2 = row.insertCell(1);
+
+               var element2 = document.createElement("input");
+
+               element2.type = "text";
+
+               cell2.appendChild(element2);
+               
+               
+               var cell3 = row.insertCell(2);
+
+               var element3 = document.createElement("span");
+
+               element3.innerHTML = "hola";               
+
+               cell3.appendChild(element3);
+
+
+          }
+          
+          function addRow2(tableID, numero1, numero2) {
+
+               var table = document.getElementById(tableID);
+
+               var rowCount = table.rows.length;
+
+               var row = table.insertRow(rowCount);
+
+               var cell3 = row.insertCell(0);
+
+                var element3 = document.createElement("span");
+
+                element3.innerHTML = ""+numero1;               
+
+                cell3.appendChild(element3);
+
+
+                var cell4 = row.insertCell(1);
+
+                var element4 = document.createElement("span");
+
+                element4.innerHTML = ""+numero2;               
+
+                cell4.appendChild(element4);
+
+          }
+        </script>
+</head>
+<body>
+  <h1 id="encabezado"> Generadores de Numeros Aleatorios</h1>
+  <section class="container">
+    <div class="login">
+      <h1>Generador Congruencial</h1>
+        <p><input type="text" id="semilla" name="login" value="" placeholder="Semilla"></p>
+        <p><input type="text" id ="a" name="login" value="" placeholder="Valor de A"></p>
+        <p><input type="text" id ="c" name="login" value="" placeholder="Valor de C"></p>
+        <p><input type="text" id ="m" name="login" value="" placeholder="Valor de M"></p>
+        <!--<p><input type="password" name="password" value="" placeholder="Password"></p>-->
+        <!--
+        <p class="remember_me">
+          <label>
+            <input type="checkbox" name="remember_me" id="remember_me">
+            Remember me on this computer
+          </label>
+        </p>-->
+        <p class="submit">
+            <button onclick="congruencial()">Generar</button>
+            <!--<input type="submit" name="commit" value="Login">-->
+        </p>
+    </div>
+      
+      <div class="containerTable">
+          <div class="datagrid">
+            <table id="tablita">
+            <thead><tr><th>Numeros del Generador</th><th>Numeros entre 0 y 1</th></tr></thead>
+            <!--<tfoot><tr><td colspan="4"><div id="paging"><ul><li><a href="#"><span>Previous</span></a></li><li><a href="#" class="active"><span>1</span></a></li><li><a href="#"><span>2</span></a></li><li><a href="#"><span>3</span></a></li><li><a href="#"><span>4</span></a></li><li><a href="#"><span>5</span></a></li><li><a href="#"><span>Next</span></a></li></ul></div></tr></tfoot>-->
+            <tbody>
+                <!--
+                <tr><td>data</td><td>data</td></tr>
+            <tr class="alt"><td>data</td><td>data</td></tr>
+            <tr><td>data</td><td>data</td></tr>
+            <tr class="alt"><td>data</td><td>data</td></tr>
+            <tr><td>data</td><td>data</td></tr>-->
+            </tbody>
+            </table>
+          </div>
+        </div>
+  </section>
+        <section class="container1">
+    <div class="login">
+      <h1>Cuadrados Medios</h1>
+      
+        <p><input type="text" id="cuadrado" name="login" value="" placeholder="Semilla"></p>        
+        <!--<p><input type="password" name="password" value="" placeholder="Password"></p>-->
+        <!--
+        <p class="remember_me">
+          <label>
+            <input type="checkbox" name="remember_me" id="remember_me">
+            Remember me on this computer
+          </label>
+        </p>-->
+        <p class="submit">
+            <button onclick="cuadradosMedios()">Generar</button>
+            <!--<input type="submit" name="commit" value="Login">-->
+        </p>
+      
+    </div>
+            <div class="containerTable">
+          <div class="datagrid">
+            <table id="tablita2">
+            <thead><tr><th>Numeros del Generador</th><th>Numeros entre 0 y 1</th></tr></thead>
+            <!--<tfoot><tr><td colspan="4"><div id="paging"><ul><li><a href="#"><span>Previous</span></a></li><li><a href="#" class="active"><span>1</span></a></li><li><a href="#"><span>2</span></a></li><li><a href="#"><span>3</span></a></li><li><a href="#"><span>4</span></a></li><li><a href="#"><span>5</span></a></li><li><a href="#"><span>Next</span></a></li></ul></div></tr></tfoot>-->
+            <tbody>
+               <!--
+            <tr><td>data</td><td>data</td></tr>
+            <tr class="alt"><td>data</td><td>data</td></tr>
+            <tr><td>data</td><td>data</td></tr>
+            <tr class="alt"><td>data</td><td>data</td></tr>
+            <tr><td>data</td><td>data</td></tr>-->
+            </tbody>
+            </table>
+          </div>
+        </div>
+    <!--
+    <div class="login-help">
+      <p>Forgot your password? <a href="index.html">Click here to reset it</a>.</p>
+    </div>
+    -->
+  </section>
+    <!--
+  <section class="about">
+    <p class="about-links">
+      <a href="http://www.cssflow.com/snippets/login-form" target="_parent">View Article</a>
+      <a href="http://www.cssflow.com/snippets/login-form.zip" target="_parent">Download</a>
+    </p>
+    <p class="about-author">
+      &copy; 2012&ndash;2013 <a href="http://thibaut.me" target="_blank">Thibaut Courouble</a> -
+      <a href="http://www.cssflow.com/mit-license" target="_blank">MIT License</a><br>
+      Original PSD by <a href="http://www.premiumpixels.com/freebies/clean-simple-login-form-psd/" target="_blank">Orman Clark</a>
+  </section>
+    -->
+</body>
+</html>
